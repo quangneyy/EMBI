@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+  <script src="js/jquery-3.6.3.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <!-- <script src="js/jquery.js" type="text/javascript"></script> -->
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EDYP4WHHD"></script>
   <script>
@@ -41,8 +44,6 @@
   <link rel="stylesheet" href="css/responsive.css">
   <!-- Favicon -->
   <link rel="shortcut icon" href="images/favicon.webp" type="image/x-icon">
-
-  <script src="js/jquery-3.6.3.min.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -164,7 +165,7 @@
                 <input id="email" type="email" class="form-control" placeholder="Nhập email của bạn">
               </div>
               <div class="form-group">
-                <a  href="https://meowtech.vn/contact.php" target="_blank"><button id="btnSubmit" class="btn">ĐĂNG KÝ</button></a>
+                <button id="btnSubmit" class="btn">ĐĂNG KÝ</button>
               </div>
               <div id="message">
 
@@ -199,12 +200,14 @@
                                     $('#btnSubmit').on('click', function() {
                                     $("#btnSubmit").attr("disabled", "disabled");
                                     var email = $('#email').val();
-                                    console.log(email);
                                     if(email!=""){
+                                        console.log(email);
                                         $.ajax({
                                             url: "insert.php",
                                             type: "POST",
-                                            data: email,
+                                            data: {
+                                              email: email
+                                            },
                                             cache: false,
                                             success: function(dataResult){
                                                 var dataResult = JSON.parse(dataResult);
@@ -1300,13 +1303,48 @@
           <!-- p -->
           <p>Vui lòng điền thông tin email của bạn</p>
         </div>
-        <form action="" data-aos="fade-in" data-aos-duration="1500" data-aos-delay="100">
+        <form if="formSecond" action="" data-aos="fade-in" data-aos-duration="1500" data-aos-delay="100">
           <div class="form-group">
-            <input type="email" class="form-control" placeholder="Nhập email của bạn">
+            <input id="emailSecond" type="email" class="form-control" placeholder="Nhập email của bạn">
           </div>
           <div class="form-group">
-            <a href="https://meowtech.vn/contact.php" target="_blank"><button class="btn">ĐĂNG KÝ</button></a>
+            <button id="btnSubmitSecond" class="btn">ĐĂNG KÝ</button>
           </div>
+          <div id="messageSecond">
+
+          </div>
+          <script>
+            $(document).ready(function() {
+                                    $('#btnSubmitSecond').on('click', function() {
+                                    $("#btnSubmitSecond").attr("disabled", "disabled");
+                                    var email = $('#emailSecond').val();
+                                    if(email!=""){
+                                        console.log(email);
+                                        $.ajax({
+                                            url: "insert.php",
+                                            type: "POST",
+                                            data: email,
+                                            cache: false,
+                                            success: function(dataResult){
+                                                var dataResult = JSON.parse(dataResult);
+                                                if(dataResult.statusCode==200){
+                                                    $("#btnSubmitSecond").removeAttr("disabled");
+                                                    $('#formSecond').find('input:text').val('');
+                                                    $("#messageSecond").show();
+                                                    $('#messageSecond').html('Email has been sent successfully');
+                                                }
+                                                else if(dataResult.statusCode==201){
+                                                    alert("Error occured !");
+                                                }
+                                            }
+                                        });
+                                        }
+                                        else{
+                                            alert('Please fill all the field !');
+                                        }
+                                    });
+                                });
+          </script>
         </form>
       </div>
     </div>
